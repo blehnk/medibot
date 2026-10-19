@@ -285,3 +285,160 @@ Next.js; no intermediate UI or deployment is required.
 - Stage 2 follows after commit review: build cited context from retrieved passages,
   then introduce a cloud LLM provider/configuration without reading .env contents.
 - Tutor has not edited core code or performed commits/pushes.
+
+## Baseline retrieval commits reviewed - 2026-10-19
+
+- Local history confirms edef245 'Perform chunk retrieval/semantic search' includes
+  only medibot/ingest.py; 38431ea 'Update learning documentations' includes only
+  AGENTS.md and diary. Learner push output confirms main advanced to 38431ea.
+- Learner correctly separated application behavior and learning documentation, chose
+  messages, and pushed both together. No need to rewrite published messages.
+- Begin Stage 2 with learner-written build_context(hits) above main: list of formatted
+  passage blocks, enumerate(hits, start=1), source filename, original chunk index,
+  content, then double-newline join and return. Introduce f-strings and newline escapes.
+- Call with response.points[:3] to limit this baseline generation context to dense
+  top-3 results. These are not reranked. Keep top-10 diagnostic retrieval available.
+- Expected labels [1], [2], [3], source filename, original indexes 16,33,15 for the
+  current query. Local context labels differ from original chunk indexes.
+- Wait for attempt/output before cloud provider setup, prompt construction, or LLM calls.
+- No model-generated answer exists yet. Tutor has not committed/pushed on learner's behalf.
+
+## Reviewed citation context function - 2026-10-19
+
+- Saved build_context(hits) and learner output reviewed: correct local list,
+  enumerate(start=1), f-string source/index/content block, append, and return of
+  double-newline join. Context labels [1],[2],[3] map to chunks 16,33,15.
+- No refactor needed for local variable context or current working formatting.
+- Asked which cloud LLM provider learner already has access to, without requesting
+  keys or inspecting .env. Course examples use Groq; provider choice pending.
+- Next provider-independent task: write system_prompt instructing context-only answers,
+  citations using supplied [n] labels, explicit insufficient-evidence handling, and
+  treating passage text as evidence rather than instructions. Write user_prompt as
+  f-string combining question and context with clear headings; print to inspect.
+- Triple-quoted strings allow multiline prompts. Prompt instructions do not enforce
+  future RBAC or guarantee grounding. No API call or provider dependency added yet.
+- Wait for learner prompt attempt and provider selection before cloud connection.
+- Next commit boundary: coherent cited-context/prompt preparation after review.
+
+## Reviewed prompt attempt - 2026-10-19
+
+- Learner has Groq and OpenAI access. Agreed to use Groq first to follow course examples;
+  no API keys requested, read, or displayed. Provider dependency not installed yet.
+- Learner-pasted prompts correctly use triple-quoted system instructions and an
+  interpolated question/context user prompt. Includes context-only answers, passage
+  labels, insufficient-evidence response, and retrieved content as evidence.
+- Tighten ambiguous 'DO NOT answer if you do not have the context' to explicitly cover
+  context that exists but does not support the answer. Suggested wording: 'Answer only
+  claims supported by the supplied passages. If evidence is insufficient, say that the
+  provided context does not contain enough information; do not guess.'
+- Saved file inspected still ends at context printing; prompts may be unsaved. Ask
+  learner to save, print/inspect both prompts, and confirm interpolation before commit.
+- Typo recieve -> receive is optional cleanup; no functional issue with indentation
+  inside multiline strings. Prompt instructions alone do not guarantee grounding.
+- Next commit boundary is source-labelled context and grounded prompt preparation in
+  medibot/ingest.py, after final edit/save and printed inspection. Learner chooses message
+  and performs review/staging/commit/push. Then install/configure Groq and teach API call.
+- No core code edited, provider calls made, or commits performed by tutor.
+
+## Prompt commit and Groq setup - 2026-10-19
+
+- Learner reported done. Saved prompts include strengthened evidence-only wording,
+  actual question/context f-string, and print statements. Local and origin/main
+  tracking history show 197076d 'Context and prompt preparation'; no printed prompt
+  output independently reviewed. Remaining 'recieve' typo is nonfunctional.
+- Tutor installed groq 1.7.0 with uv add groq; updated pyproject.toml and uv.lock.
+  SDK import passed. No API client instantiated or remote completion called by tutor.
+- Added placeholder-only .env.example and README configuration instructions. Actual
+  .env files remain unopened. Learner creates project-root .env and runs uv with
+  --env-file .env; no python-dotenv required.
+- Current official Groq quickstart/models checked: llama-3.3-70b-versatile available
+  and chat.completions.create with messages supported. Use separate llm variable to
+  preserve client as the Qdrant client.
+- Next learner task: import Groq, construct llm=Groq(), complete system/user message
+  content using existing prompts in chat.completions.create, and print first choice
+  message content. Use temperature=0; inspect actual citations/support afterward.
+- No commit/push performed. After working answer, review application/dependency/docs
+  changes and choose coherent learner-run commits. No key contents requested.
+
+## Groq model availability error - 2026-10-19
+
+- Learner's completion request returned HTTP 404 model_not_found for
+  llama-3.3-70b-versatile: model does not exist or account lacks access.
+- Do not treat this as a chunking/retrieval bug or claim invalid credentials from
+  this evidence alone. No completion answer generated/reviewed yet.
+- Rechecked official Groq models catalog: llama-3.3-70b-versatile is labelled Enterprise.
+  Earlier quickstart-based recommendation did not establish learner account access.
+- Installed Groq Models.list signature checked. Next diagnostic is learner-run
+  standalone command using Groq().models.list().data to print model IDs only, via
+  uv --env-file .env. This avoids rerunning embedding/ingestion for model discovery.
+- Wait for actual accessible IDs before selecting replacement; do not assume the
+  listing alone guarantees a particular model supports chat completion.
+- Tutor did not read .env, instantiate authenticated clients, or call provider APIs.
+
+## Account model listing reviewed - 2026-10-19
+
+- Learner ran SDK model listing successfully. Available IDs include openai/gpt-oss-20b
+  and openai/gpt-oss-120b; attempted llama-3.3-70b-versatile is absent.
+- Use openai/gpt-oss-20b for the first Groq-hosted text answer. Change only the
+  model argument, retain retrieval, prompts, messages, and temperature=0.
+- The openai/ prefix is part of the model ID; provider remains Groq and uses
+  GROQ_API_KEY. No need to switch SDKs or OpenAI credentials.
+- Learner reruns existing command and shares generated answer for citation/evidence
+  review. No successful generated answer yet. Tutor did not read keys or call the API.
+
+## First generated answer reviewed - 2026-10-19
+
+- Saved Groq call correctly passes system/user prompts to openai/gpt-oss-20b with
+  temperature=0; learner produced first successful end-to-end baseline RAG answer.
+- Items 1-5 are supported by context label 3; KYC/policy item by label 1.
+- Item 6 says 'Cancelled cheque or other bank-verification document' with label 3.
+  Source actually says 'Cancelled cheque or' in label 3, continued as 'passbook copy
+  for payout' in label 1. The broader alternative is not explicitly supported, and
+  complete item requires both passages. Treat as a grounding/citation failure.
+- Output uses Unicode citation brackets rather than requested ASCII [n] labels;
+  references are understandable but formatting should be made explicit for future UI.
+- Next learner edit: strengthen system prompt to preserve named document types and
+  alternatives, include every passage needed to support a statement, and use exact
+  [1] citation format. Rerun same question/retrieval to inspect generated item 6.
+- Expected supported wording: cancelled cheque or passbook copy for payout, citing
+  [3] and [1]. No generation rerun by tutor. Stronger prompts are not guarantees.
+- After correction review, test a deliberately unanswerable question before calling
+  grounded-answer stage complete and choosing the next learner-run commit boundary.
+
+## Repeated grounding failure after prompt edit - 2026-10-19
+
+- Saved system prompt includes learner's requested preservation, all-supporting-passages,
+  and exact [n] citation requirements. Learner implemented prompt edit correctly.
+- New output still invents 'equivalent bank-detail proof', lists cancelled cheque and
+  passbook copy as separate requirements despite original 'or', and uses Unicode
+  brackets. The final completeness assertion is not established by retrieval alone.
+- This is a recorded failed answer-quality check, not a Python implementation error.
+  Prompt tightening did not fix this case. Split evidence and ranking remain known
+  limitations; do not assert a single proven cause or promise structured chunking
+  will fully fix generation errors.
+- Avoid further answer-specific prompt tuning. Next controlled check: change only
+  question to 'What was MediAssist annual revenue in 2025?', keeping model/prompt/
+  retrieval settings. Inspect retrieved context and whether model acknowledges lack
+  of evidence instead of inventing a figure.
+- Retain both answerable outputs as failed baseline examples. Commit the working
+  API integration with documented quality limitations after missing-evidence test;
+  do not label grounded-answer quality fully validated. Learner performs commits.
+
+## Missing-evidence test reviewed - 2026-10-19
+
+- For requested annual-revenue question, learner reports 'I am sorry but I do not
+  have a concrete answer for that.' Expected refusal observed for this single run.
+  Retrieved context was not shared for independent inspection. Do not generalize
+  to reliable refusal across all questions or label all grounding checks passed.
+- Baseline Groq generation is functional; reimbursement alternative/citation tests
+  remain failed, as documented above. No revenue number invented in supplied output.
+- Verified git check-ignore .env without opening it. Current integration files:
+  medibot/ingest.py, pyproject.toml, uv.lock, .env.example, README.md; these belong
+  together as code, dependencies, placeholder configuration, and usage instructions
+  for one feature. Teaching diary is a separate progress-documentation commit.
+- Next learner action: inspect status/diffs, stage explicit integration files,
+  review staged diff, choose message, commit; then separately commit diary and push.
+- After commit review, move toward structural ingestion with Docling; preserve
+  working baseline and failed examples for meaningful comparisons. Recheck package
+  compatibility and teach parsing before replacing the learner's word splitter.
+- No commit/push by tutor, actual .env unopened, no provider requests by tutor.
