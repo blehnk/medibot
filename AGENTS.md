@@ -13,7 +13,10 @@ Never read actual .env files. Preserve original cohort resources. Only ingest th
 explicit assignment-document allowlist; exclude learning files. Supplied documents,
 SQLite data, credentials, caches, and environments must stay out of Git. This is
 a public repository: stage explicit project files and inspect the staged list.
-Commit and push reviewed milestones; verify the remote commit before claiming sync.
+The learner performs commits and pushes. Nudge at coherent reviewed milestones;
+initially explain exact commands, staging choices, and commit messages. Gradually
+ask the learner to choose files, messages, and commands independently. Do not commit
+or push on their behalf unless explicitly requested. Verify sync when reviewing it.
 
 Use the data-source access matrix: doctor=clinical+nursing+general;
 nurse=nursing+general; billing_executive=billing+general;
