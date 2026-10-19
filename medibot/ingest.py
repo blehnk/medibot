@@ -83,6 +83,27 @@ def main():
     )
     print(result.count)
 
+    print("------------------------------------")
+    # question = "What documents are required to submit an insurance claim?"
+    question = "Which documents are required for a reimbursement claim?"
+    query_embedding = model.encode(question)
+
+    response = client.query_points(
+        collection_name=collection_name,
+        query=query_embedding,
+        limit=10,
+        with_payload=True,
+    )
+
+    print(len(response.points))
+
+    for hit in response.points:
+        print(hit.score)
+        print(hit.payload["source_document"])
+        print(hit.payload["chunk_index"])
+        print(hit.payload["content"])
+        print("---")
+
 
 if __name__ == "__main__":
     main()
