@@ -1,0 +1,31 @@
+# Credentials: never inspect or commit actual environment files.
+.env
+.env.*
+!.env.example
+*.env
+*.pem
+*.key
+
+# Supplied resources and generated state stay local.
+data/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.cache/
+models/
+indexes/
+.qdrant/
+*.db
+*.db-*
+*.sqlite*
+*.zip
+*.pdf
+node_modules/
+.next/
+.aws/
+.codex/
+.agents/
+Thumbs.db
+.DS_Store
