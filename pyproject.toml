@@ -5,6 +5,7 @@ description = "A project-first learning implementation of the MediBot assignment
 readme = "README.md"
 requires-python = ">=3.12,<3.14"
 dependencies = [
+    "groq>=1.7.0",
     "qdrant-client>=1.15,<2",
     "sentence-transformers>=5,<7",
     "torch>=2.8,<3",

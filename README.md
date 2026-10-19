@@ -73,3 +73,26 @@ with screenshots. Verify citations, insufficient evidence, ingestion repeatabili
 and all five roles. Setup commands above are not evidence of assignment completion.
 
 Dependency setup follows [uv's CPU PyTorch guide](https://docs.astral.sh/uv/guides/integration/pytorch/).
+
+## Groq configuration (Stage 2)
+
+Groq is the first cloud LLM provider used for this learning project. The SDK is
+included in the project dependencies. Create .env in this project root using
+.env.example as a guide and enter your own GROQ_API_KEY locally. Keep .env ignored.
+
+```powershell
+uv run --locked --env-file .env python -m medibot.ingest
+```
+
+uv loads the environment for the process; Groq() reads GROQ_API_KEY. The tutor does
+not inspect the actual .env file. Never put the key in Python code or shared output.
+The learner implements the API call after prompt review; configuration alone does
+not mean answer generation is complete. The first attempted model, llama-3.3-70b-versatile, returned model_not_found
+for the learner account. Groq currently labels it Enterprise. Select the next
+chat model after listing IDs available to the account with Groq().models.list();
+see https://console.groq.com/docs/models. A quickstart model may require access
+that differs from this account.
+
+The learner's account listing includes openai/gpt-oss-20b; use this as the initial
+Groq-hosted answer model instead. Keep the Groq SDK and GROQ_API_KEY. Its openai/
+prefix is the model namespace, not a switch to the OpenAI API provider.
