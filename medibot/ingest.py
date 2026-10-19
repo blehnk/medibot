@@ -2,6 +2,8 @@
 
 from pathlib import Path
 from medibot.chunking import split_word_chunks, build_chunk_records
+from sentence_transformers import SentenceTransformer
+from qdrant_client import QdrantClient, models
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 # Initial ingestion allowlist: exactly one document. No directory scanning.
@@ -32,6 +34,54 @@ def main():
     print(len(chunk_records))
     print(chunk_records[0])
     print(chunk_records[-1]["chunk_index"])
+
+    print("------------------------------------")
+    model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+    embeddings = model.encode(chunks)
+    print(embeddings.shape)
+    print(embeddings[0].shape)
+
+    print("------------------------------------")
+    client = QdrantClient(":memory:")
+    collection_name = "medibot_baseline"
+
+    client.create_collection(
+        collection_name=collection_name,
+        vectors_config=models.VectorParams(
+            size=embeddings.shape[1],  # Get the vector dimension from embeddings.shape
+            distance=models.Distance.COSINE,  # Use models.Distance.COSINE
+        ),
+    )
+
+    print(client.collection_exists(collection_name))
+
+    print("------------------------------------")
+    points = []
+
+    for index, record in enumerate(chunk_records):
+        point = models.PointStruct(
+            id=index,
+            vector=embeddings[index].tolist(),
+            payload=record,
+        )
+        points.append(point)
+
+    print(len(points))
+    print(len(points[0].vector))
+    print(points[0].payload["source_document"])
+
+    print("------------------------------------")
+    client.upsert(
+        collection_name=collection_name,
+        points=points,
+        wait=True,
+    )
+
+    result = client.count(
+        collection_name=collection_name,
+        exact=True,
+    )
+    print(result.count)
 
 
 if __name__ == "__main__":
