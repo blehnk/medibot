@@ -17,9 +17,9 @@ def main():
         )
     print(note)
 
-    # TODO (learner): read UTF-8 text, print its length, and print its first 200 characters.
-    # See learning/first_lesson.md. Your two existing helpers are in medibot/chunking.py.
-    print("Task 1 pending: add the three statements described in learning/first_lesson.md")
+    text = note.read_text(encoding="utf-8")
+    print(len(text))
+    print(text[:200])
 
 
 if __name__ == "__main__":
