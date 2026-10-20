@@ -2,7 +2,10 @@
 
 A learning implementation of the Codebasics MediBot assignment. We build the
 application in small reviewed steps, starting with a single claims document.
-**Status: project setup and first ingestion lesson; no working RAG application yet.**
+**Status: baseline dense retrieval and Groq answer generation work; structured ingestion is next.**
+Known baseline failures include split checklist items, unsupported document alternatives,
+and citation formatting. One missing-evidence question produced the expected refusal;
+answer quality is not fully validated. See the teaching diary for the recorded checks.
 
 The final target is structured ingestion, role-filtered hybrid retrieval,
 cross-encoder reranking, cited cloud-LLM answers, SQL RAG, FastAPI, and Next.js.
@@ -96,3 +99,15 @@ that differs from this account.
 The learner's account listing includes openai/gpt-oss-20b; use this as the initial
 Groq-hosted answer model instead. Keep the Groq SDK and GROQ_API_KEY. Its openai/
 prefix is the model namespace, not a switch to the OpenAI API provider.
+
+## Structured ingestion (Stage 3)
+
+Docling is now included in the project dependencies. Complete the first parsing task
+in learning/structured_ingestion.md, then run:
+
+```powershell
+uv run --locked python -m medibot.structured_ingest
+```
+
+This starts with the same single Markdown guide; no LLM key is required. The module
+is a learner starter. Original baseline behavior remains in medibot/ingest.py.

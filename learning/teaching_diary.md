@@ -442,3 +442,24 @@ Next.js; no intermediate UI or deployment is required.
   working baseline and failed examples for meaningful comparisons. Recheck package
   compatibility and teach parsing before replacing the learner's word splitter.
 - No commit/push by tutor, actual .env unopened, no provider requests by tutor.
+
+## Groq integration commits and Stage 3 setup - 2026-10-19
+
+- Local history confirms e7af804 'Integrate Groq to generate answers.' contains
+  application, dependency, placeholder env example, and README changes; 0381c56
+  'Routine doc updation' contains only diary. Learner push output confirms main
+  advancement to 0381c56. Future documentation messages can name the recorded
+  checkpoint; no rewrite of published commits needed.
+- Installed docling 2.140.0 / docling-core 2.102.0 using uv. Dependency resolution,
+  DocumentConverter import, and synthetic in-memory Markdown conversion/export
+  passed on Windows Python 3.13.5. No actual .env files read or provider calls made.
+- Added medibot/structured_ingest.py starter and learning/structured_ingestion.md.
+  Learner writes converter construction, convert(note), result.document, class-name
+  inspection, and first 400 characters of Markdown export. Starter syntax checked.
+- Baseline ingest.py preserved. Only initial claim-guide path allowlisted in starter.
+  Real assignment conversion has not yet been attempted by learner or verified here.
+- Explain parsing versus chunking; export is for inspection while DoclingDocument
+  retains structural elements. Next after review: inspect headings/list/table objects,
+  then structure/token-aware chunking and complete assignment metadata.
+- Updated README status to working baseline with known answer-quality failures.
+  No learner core logic filled, no commits or pushes performed by tutor.
