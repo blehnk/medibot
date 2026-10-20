@@ -111,3 +111,9 @@ uv run --locked python -m medibot.structured_ingest
 
 This starts with the same single Markdown guide; no LLM key is required. The module
 is a learner starter. Original baseline behavior remains in medibot/ingest.py.
+
+## Resume learning on another machine
+
+Start with [the resume note](learning/RESUME.md), including current status, the exact
+next task, new-machine setup, and a prompt for the new tutor chat. The teaching diary
+contains the detailed reviewed attempts and known answer-quality failures.

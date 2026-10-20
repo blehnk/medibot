@@ -463,3 +463,20 @@ Next.js; no intermediate UI or deployment is required.
   then structure/token-aware chunking and complete assignment metadata.
 - Updated README status to working baseline with known answer-quality failures.
   No learner core logic filled, no commits or pushes performed by tutor.
+
+## Cross-machine teaching handoff - 2026-10-20
+
+- Learner intends to continue on another machine. Inspected repository: clean before
+  handoff edits; HEAD and recorded origin/main both b7a3087, 'Prepare Docling structured
+  ingestion lesson and starter'. Actual starter still contains TODOs.
+- Added learning/RESUME.md with teaching/commit preferences, baseline failures, exact
+  next Docling task, environment/data recreation, and a new-chat resume prompt.
+- LangChain question from prior conversation recorded in resume note: not yet used;
+  can introduce after understanding structural retrieval; specific integration undecided.
+- This is a file-based teaching handoff, not a claim that the original chat syncs.
+  Original assignment brief, session reference files, data, environments, and actual
+  credentials are not in the public repository. Transfer local resources separately.
+- Learner should review/stage README.md, learning/RESUME.md, and this diary, commit
+  the handoff, and push before switching. Tutor has not committed or pushed.
+- On new machine, verify local setup then resume first Docling parsing task; wait
+  for learner implementation/output before inspecting structure or adding chunking.
