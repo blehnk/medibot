@@ -16,12 +16,30 @@ def main():
         raise SystemExit("Dataset missing. See README.md to prepare the local data.")
     print(note)
 
-    # TODO (learner): construct DocumentConverter as converter.
-    # Call converter.convert(note), storing the result as result.
-    # Get result.document and store it as document.
-    # Print type(document).__name__ and a 400-character Markdown export preview.
-    print("Structured parsing task pending. See learning/structured_ingestion.md")
+    converter = DocumentConverter()
 
+    result = converter.convert(note)
+    document = result.document
+
+    print(type(document).__name__)
+    print(document.export_to_markdown()[:400])
+
+
+    print("-------------------------------")
+    for index, (item, level) in enumerate(document.iterate_items()):
+        if index >= 15:
+            break
+
+        print(type(item).__name__, item.label, level)
+        print(getattr(item, "text", ""))
+
+
+    print("-------------------------------")
+    print(len(document.tables))
+    table = document.tables[0]
+    print(table.data.num_rows)
+    print(table.data.num_cols)
+    print(table.export_to_markdown(doc=document))
 
 if __name__ == "__main__":
     main()
