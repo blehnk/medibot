@@ -37,6 +37,31 @@ reduce command scaffolding. Do not perform commits for the learner unless asked.
 
 ## Exact next learner task
 
+Update 2026-10-27: first real claim-guide conversion is reviewed and correct in
+saved code and learner output (DoclingDocument plus opening preview). Next inspect
+the first 15 document.iterate_items() entries: class, label, traversal level, short
+text preview. Structure and chunking remain unreviewed; see latest diary entry.
+The original parsing task below is retained as context and is now complete.
+
+Latest: first-15 element inspection is now reviewed. Next filter all elements to
+LIST_ITEM/TABLE labels and inspect checklist items/table presence. Individual
+elements can be sentence fragments; they are not final chunks. See diary.
+
+Latest follow-up: LIST_ITEM/TABLE filtering reviewed. Payout alternative is intact;
+blank list-item text may have content in descendants. Next inspect first table:
+table count, row/column counts, and table.export_to_markdown(doc=document). Tutor
+verified six tables and first shape 3 x 2; wait for learner output before chunking.
+
+Current next action: first-table learner code/output now reviewed and correct.
+Remove the leftover loop that only prints separators, then learner reviews/commits
+parsing, dependency fix, and notes in separate coherent commits. Next lesson is
+structural/token-aware chunking with heading context; not yet implemented.
+
+Linux setup verified on 2026-10-20: Python 3.13.14, prepared allowlisted dataset,
+synthetic Docling conversion and Qdrant query passed. CPU Torchvision source added
+to fix a Linux import failure; dependency and teaching-note changes await learner
+review/commit. Real claim-guide conversion remains the learner's next task.
+
 See learning/structured_ingestion.md. Inside structured_ingest.main(): construct a
 DocumentConverter, call convert(note), access result.document, print its class name,
 and preview the first 400 characters of document.export_to_markdown(). Expected

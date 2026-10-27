@@ -1,5 +1,36 @@
 # MediBot teaching diary
 
+## Latest review - first table export - 2026-10-27
+
+- Saved table inspection and learner output reviewed: six tables, first shape
+  three rows/two columns, correct planned/emergency admission deadlines in Markdown.
+  This confirms the inspected table's shape and displayed contents, not all tables
+  or any PDF parsing. First real Markdown parsing/inspection checkpoint reached.
+- Saved LIST_ITEM/TABLE loop now has diagnostic print statements commented out
+  and prints only separators. Next learner action: remove that unused loop and its
+  commented statements before reviewing/committing parsing work.
+- Coherent commits: structured_ingest.py for parsing/inspection, pyproject.toml plus
+  uv.lock for CPU Torchvision setup fix, teaching_diary.md plus RESUME.md for progress.
+  Learner chooses messages, reviews explicit staging, commits and pushes; tutor does
+  not do so. Then introduce structural/token-aware chunking with heading context.
+- No chunking implemented or validated; descendant text handling remains relevant.
+
+## Latest review - list and table inspection - 2026-10-27
+
+- Saved LIST_ITEM/TABLE filter and learner output reviewed: labels selected correctly.
+  Payout item is intact: 'Cancelled cheque or passbook copy for payout.' This verifies
+  this parsed item, not final chunks or answer quality. Prior first-15 loop retained
+  as an extra diagnostic; no functional problem.
+- Tutor inspected the same allowlisted guide: six tables detected. First table has
+  three rows/two columns and exports admission types/deadlines. Table contents still
+  need learner inspection. A blank list item contains an InlineGroup child; direct
+  .text inspection/filtering alone can omit descendant text. Do not discard blanks
+  or equate each item with a complete chunk.
+- Next learner task: print len(document.tables), select document.tables[0], print
+  its data.num_rows/data.num_cols and export_to_markdown(doc=document). Expected six
+  tables, first shape 3 x 2, admission types/deadlines. Review output before chunking.
+- No learner core code edited, .env files read, commits, or pushes performed.
+
 ## Goal and teaching agreement
 
 Learn Python and AI engineering through the MediBot assignment covering Sessions
@@ -480,3 +511,63 @@ Next.js; no intermediate UI or deployment is required.
   the handoff, and push before switching. Tutor has not committed or pushed.
 - On new machine, verify local setup then resume first Docling parsing task; wait
   for learner implementation/output before inspecting structure or adding chunking.
+
+## Linux environment and dataset verification - 2026-10-20
+
+- Read teaching instructions and handoff; application starter still has TODOs.
+  Repository was clean at a5c5828 before setup. No actual .env files read.
+- Created a fresh Linux x86_64 environment with Python 3.13.14 and uv 0.12.0.
+  Locked installation succeeded after retrying downloads with network access.
+- Found the supplied archive in the workspace's cohort_materials assignment folder.
+  Ran the existing preparation tool for exactly its 13 allowlisted files; all copies
+  match the archive. Original resources unchanged. Guide: 12,833 characters, 40
+  baseline 50-word chunks. Dataset and .venv confirmed ignored by Git.
+- Initial Sentence Transformers import failed with torchvision::nms missing.
+  Torchvision's native library referenced unavailable CUDA libraries while Torch
+  was CPU-only. Added explicit torchvision dependency/source matching the CPU Torch
+  index on Linux/Windows and refreshed uv.lock. Installed torchvision 0.29.1+cpu
+  with torch 2.14.1+cpu; subsequent imports passed.
+- Verified Docling 2.140.0 synthetic in-memory Markdown conversion/export returns
+  DoclingDocument; Sentence Transformers and Groq imports and a synthetic in-memory
+  Qdrant upsert/query passed. Locked offline resync passed. No embedding model
+  inference, real claim-guide Docling conversion, or provider requests performed.
+- Next learner task remains learning/structured_ingestion.md: construct converter,
+  convert note, access result.document, print class name and 400-character export.
+  Wait for learner code/output before structure inspection or chunking. No core
+  application edits, staging, commits, or pushes by tutor. Setup changes remain
+  available for learner review/commit.
+
+## Reviewed first real Docling conversion - 2026-10-27
+
+- Saved structured_ingest.py and learner output reviewed: correct converter
+  construction, convert(note), result.document, class name, and 400-character
+  Markdown preview. Output shows DoclingDocument and the expected claim-guide
+  opening. Real Markdown conversion task complete; structural quality and chunking
+  are not yet validated. Completed TODO comments can now be removed by learner.
+- Earlier NameError came from calling converter before constructing the instance;
+  explained class versus instance and learner corrected it.
+- Discussed Markdown syntax parsing versus PDF layout/OCR, alternatives, and
+  Beautiful Soup's related HTML/XML parsing role. Export escapes ampersands as
+  &amp;; preview alone does not establish heading/list/table preservation.
+- Next bounded task: inspect first 15 items from document.iterate_items(), printing
+  item class, label, traversal level, and a short text preview where present.
+  Explain iterator, tuple unpacking, enumerate, and safe getattr for table items.
+  Review actual output before selecting heading/list/table inspection or chunking.
+- No application code edited or commits/pushes performed by tutor.
+
+## Reviewed element inspection - 2026-10-27
+
+- Saved first-15 iteration and learner output reviewed: correct enumerate,
+  pair unpacking, break, class/label/depth printing, and safe text access.
+  Learner prints full item text rather than a 100-character slice; valid for this
+  bounded diagnostic. Completed parsing TODO comments removed.
+- Output identifies title and section heading; inline formatting also produces
+  separate text/code elements, including punctuation-only elements. Explained that
+  an element is not automatically a chunk and traversal depth is not heading level.
+- Learner requested more purpose/context; reinforce each diagnostic's connection
+  to preserving complete requirements and heading context before adding syntax.
+- Next bounded task: iterate all elements and filter to DocItemLabel.LIST_ITEM
+  and DocItemLabel.TABLE, printing label and a short safe text preview. Locate
+  the payout checklist item and determine whether any tables were detected.
+  Empty table text is expected to require a separate table-data inspection later;
+  do not infer table contents preserved from the label alone. No chunking yet.
