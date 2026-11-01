@@ -135,6 +135,12 @@ def main():
             embedding_text = hybrid_chunker.contextualize(chunk)
             print(embedding_text)
 
+    if exceeded_count > 0:
+        raise ValueError(
+            f"{exceeded_count} chunks exceed the model's {embedder.max_seq_length}-token input limit."
+        )
+    print("All hybrid chunks fit the embedding model's input limit.")
+
 
 if __name__ == "__main__":
     main()
