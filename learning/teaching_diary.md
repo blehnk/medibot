@@ -1,5 +1,97 @@
 # MediBot teaching diary
 
+## Begin enforced token validation - 2026-11-01
+
+- Local history shows bc3b499 'perform token-aware hybrid chunking'; main matches
+  recorded origin/main. Diary remains modified; no separate new diary commit verified.
+- Learner asked whether new documents can never exceed the model limit. Explained
+  chunker budget plus final validation, and current print/count audit does not block.
+- Next bounded learner task: immediately after final hybrid token-audit summary,
+  before downstream processing, if exceeded_count > 0 raise ValueError with exceeded
+  count and embedder.max_seq_length. Add success print only after the guard.
+- Teach raise versus print: an unhandled ValueError halts execution. Existing guide
+  should pass (30, max 249, zero overflows). After code review exercise failure branch
+  using temporary validation-only lowered threshold; do not alter actual model limit
+  or chunker configuration. This protects audited text once validation precedes embedding.
+- Wait for learner attempt before metadata-record creation. Tutor does not edit core
+  logic or commit/push. Remind learner of pending diary change at next checkpoint.
+
+## Hybrid chunking checkpoint complete for claim guide - 2026-11-01
+
+- After resetting audit accumulators, learner reports 30 hybrid chunks, largest
+  contextualized input 249 tokens including special tokens, zero exceeding 256.
+  Hierarchical comparison: 42 chunks, maximum 240, zero exceeding 256.
+- Learner inspected hybrid chunk 11: all seven reimbursement checklist items intact,
+  including 'Cancelled cheque or passbook copy for payout'. Heading hierarchy and
+  contextualized string preserve title, reimbursement section, and subsection.
+- The 258-token warning does not describe any oversized final output in this audit;
+  its precise intermediate origin was not traced. Do not claim warning suppression
+  or general token safety for other documents. Retrieval/answer effects unmeasured.
+- Ready for learner-run application commit of token auditing and HybridChunker setup
+  in structured_ingest.py, plus separate diary progress commit. Learner chooses
+  messages, reviews/stages explicit files, commits and pushes; tutor does not.
+- Next lesson: convert hybrid chunks to records with contextualized embedding text,
+  source, chunk index, section metadata, collection/access roles and chunk types.
+  Teach incrementally before indexing or expanding to PDFs. No core code edited.
+
+## Hybrid token-audit accumulator review - 2026-11-01
+
+- Learner reports 72 counts, max 249, overflow 0. Saved code correctly contextualizes
+  hybrid chunks and encodes without truncation, but appends to the earlier hierarchical
+  token_counts list and reuses exceeded_count without resetting either.
+- 72 equals 42 hierarchical plus 30 hybrid entries. Explain accumulator lifetime:
+  a new for loop does not clear existing variables. Learner should initialize separate
+  hybrid counters/list or reset both immediately before the hybrid audit loop.
+- Expected isolated audit count 30; wait for revised output before recording final
+  hybrid statistics. No core edits or commits performed by tutor.
+
+## Reviewed first HybridChunker run - 2026-11-01
+
+- Saved learner setup correctly wraps embedder.tokenizer with special-token reserve,
+  constructs HybridChunker(merge_peers=True), and chunks the parsed document.
+  Learner reports 30 hybrid chunks versus 42 hierarchical chunks.
+- Transformers warning reports a tokenized sequence of 258 versus 256. No embedding
+  inference/error reported in this run. Warning may involve an intermediate candidate;
+  final output sizes are not established by the chunk count or warning alone.
+- Explain Docling's structural split/size refinement/adjacent peer merging. Heading
+  metadata equality is used, not semantic similarity between heading strings. Merging
+  requires combined contextualized text within budget; it can group multiple peers.
+- Next learner diagnostic: audit all hybrid_chunks with hybrid_chunker.contextualize,
+  encode(add_special_tokens=True, truncation=False), then print count, maximum, and
+  number exceeding embedder.max_seq_length. Do not silence warning or enlarge limit.
+- Wait for measured final sizes before declaring token safety or advancing indexing.
+
+## Reviewed complete structural token audit - 2026-11-01
+
+- Learner reported checklist 114 tokens versus embedder.max_seq_length=256.
+- Learner audited all hierarchical chunks; corrected storing token ID lists to
+  storing their lengths, and corrected exceeded_count = +1 to += 1 after hints.
+  Saved code confirms corrections. Output: 42 counts, maximum 240, zero over budget.
+- These contextualized hierarchical chunks fit this model; token-aware splitting
+  is not currently required for this guide. Other documents remain unverified.
+- Next: introduce HybridChunker and HuggingFaceTokenizer wrapper using existing
+  embedder.tokenizer. Reserve special-token overhead using
+  num_special_tokens_to_add(pair=False), since installed wrapper counts raw tokens
+  through tokenizer.tokenize(). Budget equals max_seq_length minus that overhead.
+- Learner constructs hybrid chunker with merge_peers=True, collects hybrid_chunks,
+  prints count; then audits contextualized outputs with special tokens as before.
+  Chunk count may change through merging. Verify actual outputs, not assumed gains.
+- No application edits, commits, or pushes performed by tutor.
+
+## Structural checkpoint commits and token lesson - 2026-11-01
+
+- Local history confirms 9dc13d3 contains structured_ingest.py changes and bf7b67f
+  contains the diary. Working tree clean; main matches recorded origin/main.
+- Next bounded learner task: load existing all-MiniLM-L6-v2 SentenceTransformer
+  once before chunk inspection, print embedder.max_seq_length, and count tokens of
+  matched contextualized embedding_text with embedder.tokenizer.encode(...,
+  add_special_tokens=True). Print len(token_ids) and compare to the model budget.
+- Explain tokens versus words/characters and count heading context plus special
+  tokens. Published model card says inputs longer than 256 word pieces are truncated
+  by default; inspect the actual loaded model setting rather than assume.
+- No chunk-size change or HybridChunker implementation yet. Wait for token count
+  and budget output before configuring token-aware structural chunking.
+
 ## Reviewed contextualized checklist - 2026-11-01
 
 - Learner output from contextualize contains document title, reimbursement section,
