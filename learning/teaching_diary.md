@@ -1,5 +1,46 @@
 # MediBot teaching diary
 
+## Reviewed contextualized checklist - 2026-11-01
+
+- Learner output from contextualize contains document title, reimbursement section,
+  subsection heading, and all seven checklist items with payout alternative intact.
+- Structural chunking plus heading-enriched serialization checkpoint complete for
+  this inspected Markdown checklist. Token budgets, other chunks/tables, PDFs, and
+  effects on retrieval/generation remain unvalidated.
+- Commit checkpoint: learner reviews/stages structured_ingest.py for hierarchical
+  chunks and heading context, chooses message, commits; diary can be a separate
+  learning-progress commit. Tutor does not commit or push.
+- Next lesson after commit review: token counts versus word counts, embedding input
+  limits, and HybridChunker using the embedding model's tokenizer and budget. Count
+  contextualized text, not only raw chunk.text. Preserve baseline for comparison.
+
+## Reviewed reimbursement structural chunk - 2026-11-01
+
+- Learner correctly enumerated structured_chunks and filtered chunk.text for
+  'Cancelled cheque'. Reported chunk 14 contains all seven reimbursement checklist
+  items, including the intact 'Cancelled cheque or passbook copy for payout'.
+- Heading metadata contains document title, '2. Reimbursement Claim Process', and
+  '2.1 Documents required'. This improves checklist continuity versus baseline word
+  chunks 15/16; retrieval and generation improvements are not yet measured.
+- Next task: contextualize the matched chunk using chunker.contextualize(chunk),
+  store as embedding_text, print and inspect headings plus checklist text. Explain
+  metadata alone does not feed headings into embeddings when only .text is encoded.
+- Wait for learner attempt before introducing HybridChunker token budgeting.
+- No application code edited or commits/pushes performed by tutor.
+
+## Reviewed hierarchical chunks - 2026-11-01
+
+- Saved code and learner output reviewed: correct HierarchicalChunker construction,
+  chunk(dl_doc=document), list conversion, and first-chunk text/headings inspection.
+  Output: 42 chunks; first heading metadata is the claim-guide title.
+- Heading metadata is separate from chunk.text. This first result does not establish
+  checklist/table preservation, token limits, or retrieval improvement.
+- Next learner task: enumerate structured_chunks and filter chunk.text for
+  'Cancelled cheque'; print index, complete text, and meta.headings. Inspect whether
+  the payout alternative and reimbursement checklist are intact with section context.
+- Then teach contextualize() before token-aware HybridChunker. No core edits or
+  commits performed by tutor; learner continues to run commits personally.
+
 ## Latest review - first table export - 2026-10-27
 
 - Saved table inspection and learner output reviewed: six tables, first shape
