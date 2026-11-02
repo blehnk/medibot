@@ -1,5 +1,17 @@
 # MediBot teaching diary
 
+## Cross-machine handoff refreshed - 2026-11-02
+
+- Learner switches after committing records. Local commits 5ab6ff8 (application)
+  and 8633288 (diary) checked; clean before handoff, main matches recorded origin/main.
+  No live fetch performed. Replaced outdated RESUME.md with current checkpoint.
+- Next task is learner-written ordered embedding-text list and batch encoding,
+  expected (30,384), then separate structured Qdrant collection and baseline comparison.
+- Handoff preserves known answer failures, token audit 30/249/0, record policies,
+  teaching/commit preferences, environment setup, and updated new-chat prompt.
+- Learner should review/commit/push RESUME.md and diary before switching. Tutor
+  has not committed/pushed or opened actual .env files.
+
 ## Structured record classification reviewed - 2026-11-02
 
 - Learner implements ordered table/code/text rules correctly and stores chunk_type
