@@ -1,5 +1,94 @@
 # MediBot teaching diary
 
+## Structured record classification reviewed - 2026-11-02
+
+- Learner implements ordered table/code/text rules correctly and stores chunk_type
+  in each record. Reported output: table indexes 4,7,18,22,28,29; code index 2;
+  remaining 23 records text. Checklist index 11 remains text.
+- Current guide records now include content, embedding_text, source_document,
+  chunk_index, section_title, collection, access_roles, chunk_type. Policy is for
+  this one billing guide; heading-only content and multiple-document mapping remain
+  future work. Stored access roles do not yet enforce retrieval permissions.
+- Ready for learner-run application commit of structured metadata records and
+  separate diary commit, with explicit staging/diff review and learner-chosen messages.
+- Next task after commit review: collect record['embedding_text'] into a list,
+  batch encode using existing embedder, verify (30,384) and row/record alignment;
+  then index in a separate structured baseline collection and compare same questions.
+- No core code changes or commit/push performed by tutor.
+
+## Per-chunk labels reviewed; classify current guide - 2026-11-02
+
+- Learner correctly moved labels=[] inside chunk loop; all 30 label lists now
+  independently collected. Earlier placement outside accumulated across chunks;
+  reinforce local accumulator lifetime when needed.
+- Observed mixed text/code (0,1,17), code-only (2), table-containing (4,7,18,22,28,29),
+  and list-item/text chunks. No standalone heading chunk observed in this output.
+- Next explicit project policy: chunk_type='table' if any item is table; otherwise
+  'code' if all labels are code; otherwise 'text'. This is our dominant-type summary,
+  not a Docling-provided classification or claim that mixed chunks are homogeneous.
+- Learner uses if/elif/else, labels.count('code') == len(labels) for current nonempty
+  label lists, adds chunk_type to record, prints indexes/types. Expected 0=text,
+  2=code, 7=table, 11=text, 29=table. Heading-only classification deferred until
+  such a chunk is encountered; heading metadata alone does not imply heading type.
+- Wait for implementation/output, then commit complete current-guide records before
+  embedding/indexing comparisons. No core edits or commits/pushes by tutor.
+
+## Billing access metadata reviewed - 2026-11-02
+
+- Learner code/output correctly adds collection='billing' and list[str] access_roles
+  ['billing_executive','admin'] to all 30 records for the one allowlisted billing guide.
+  Creating access_roles inside the loop is valid; no refactor needed for this task.
+- Record count/index/checklist heading remain correct. section_title separator '> '
+  is valid, optional readability change to ' > ' only. No access enforcement yet.
+- Next task before chunk_type policy: inspect labels of chunk.meta.doc_items across
+  hybrid_chunks using nested loop/list append, printing index, headings, labels.
+  A merged chunk can reference multiple source items; inspect actual labels before
+  choosing rules for text/table/code/heading. Do not assume one label per chunk.
+- Wait for output before implementing classification; no core edits or commits.
+
+## Checklist guard reviewed; access metadata task - 2026-11-02
+
+- Saved code correctly initializes checklist_index=None and raises ValueError if
+  still None after loop, before indexing structured_records. Guard placement correct.
+- Next learner task: add collection='billing' and access_roles=['billing_executive',
+  'admin'] to each record dictionary for the current explicitly selected billing guide.
+  Print both from the checklist record. Roles are list[str], not comma-separated text.
+- Explain payload policy metadata versus enforcement: fields alone provide no access
+  control. Later authenticated-role filtering in Qdrant must apply before results
+  reach application/LLM. Multi-document policy mapping and chunk_type come later.
+- No core code edited or commits/pushes performed by tutor.
+
+## Reviewed initial structured records - 2026-11-02
+
+- Learner code/output correctly builds 30 dictionaries from hybrid_chunks with
+  content, contextualized embedding_text, source_document, chunk_index, and heading
+  path section_title. Final index 29; checklist heading hierarchy correct.
+- '>'.join(headings) is valid; ' > ' improves readability only.
+- Checklist lookup initializes index to 0, so missing match silently selects the
+  first record. Next small revision: initialize to None, guard with 'is None' after
+  loop, raise clear ValueError before indexed lookup. Do not use 'if not index',
+  because zero is a valid match. This is a checklist diagnostic, not a mandatory
+  requirement for every future ingested document.
+- Wait for revision before adding collection/access_roles/chunk_type metadata.
+  No core code edits or commits/pushes performed by tutor.
+
+## Validation commits reviewed; begin structured records - 2026-11-01
+
+- Local commits: 62af72d 'Add model-token limit validation', e5d5867 'Update learning
+  doc'. Clean worktree; main matches recorded origin/main. Saved guard raises with
+  actual token limit and temporary exceeded_count=1 assignment is absent.
+- Learner previously shared simulated failure traceback; guard stopped normally.
+  Learner reports completion after request to restore normal success and commit;
+  fresh normal-run output not independently inspected. Earlier real audit was zero.
+- Next bounded task after guard: build structured_records via enumerate(hybrid_chunks),
+  one dictionary with content=raw text, embedding_text=contextualize(chunk),
+  source_document=note.name, chunk_index=index, and section_title from heading path
+  joined by ' > ' (use chunk.meta.headings or [] for absent metadata).
+- Explain raw content versus heading-enriched embedding text; maintain row alignment.
+  Expected 30 records, final chunk_index 29; inspect checklist record title/text.
+- Collection, access_roles, and chunk_type will follow; records are not yet complete
+  assignment metadata. No new embedding/indexing performed; learner writes core loop.
+
 ## Begin enforced token validation - 2026-11-01
 
 - Local history shows bc3b499 'perform token-aware hybrid chunking'; main matches
