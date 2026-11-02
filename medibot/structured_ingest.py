@@ -141,6 +141,47 @@ def main():
         )
     print("All hybrid chunks fit the embedding model's input limit.")
 
+    print("-------------------------------")
+    structured_records = []
+    checklist_index = None
+    for index, chunk in enumerate(hybrid_chunks):
+        labels = []
+        for item in chunk.meta.doc_items:
+            labels.append(item.label.value)
+        # print(index, labels)
+        headings = chunk.meta.headings or []
+        access_roles = ["billing_executive", "admin"]
+        if "table" in labels:
+            chunk_type = "table"
+        elif labels.count("code") == len(labels):
+            chunk_type = "code"
+        else:
+            chunk_type = "text"
+        record = {
+            "content": chunk.text,
+            "embedding_text": hybrid_chunker.contextualize(chunk),
+            "source_document": note.name,
+            "chunk_index": index,
+            "section_title": "> ".join(headings),
+            "collection": "billing",
+            "access_roles": access_roles,
+            "chunk_type": chunk_type,
+        }
+        print(f"{index} Chunk type: {record['chunk_type']}\n")
+        structured_records.append(record)
+        if "Cancelled cheque" in chunk.text:
+            checklist_index = index
+
+    if checklist_index is None:
+        raise ValueError("Checklist not found!")
+    print(
+        f"Record count: {len(structured_records)}\n"
+        f"Last record's index: {structured_records[-1]['chunk_index']}\n"
+        f"Checklist heading: {structured_records[checklist_index]['section_title']}\n"
+        f"Collection name for checklist record: {structured_records[checklist_index]['collection']}\n"
+        f"Access roles for checklist record: {structured_records[checklist_index]['access_roles']}"
+    )
+
 
 if __name__ == "__main__":
     main()
